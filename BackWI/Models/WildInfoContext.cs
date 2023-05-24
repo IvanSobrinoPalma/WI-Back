@@ -48,7 +48,7 @@ public partial class WildInfoContext : DbContext
                 .HasColumnName("scientific_name");
             entity.Property(e => e.Type).HasColumnName("type");
 
-            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Animals)
+            entity.HasOne(d => d.TypeAnimal).WithMany(p => p.Animals)
                 .HasForeignKey(d => d.Type)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Animals_AnimalsType");
