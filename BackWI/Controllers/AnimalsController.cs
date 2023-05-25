@@ -20,13 +20,13 @@ namespace BackWI.Controllers
 
         [HttpGet]
         [Route("getAnimals")]
-        public IActionResult ListAnimals()
+        public async Task<IActionResult> ListAnimals()
         {
             List<Animals> animals = new List<Animals>();
 
             try
             {
-                animals = _context.Animals.ToList();
+                animals = await _context.Animals.ToListAsync();
                 return Ok(new { message = "ok", response = animals });
             }
             catch (Exception ex)
@@ -37,18 +37,18 @@ namespace BackWI.Controllers
 
         [HttpGet]
         [Route("getAnimal/{IdAnimal}")]
-        public IActionResult ListAnimals(Guid IdAnimal)
+        public async Task<IActionResult> ListAnimals(Guid IdAnimal)
         {
-            Animals animal = _context.Animals.Find(IdAnimal);
+            Animals animal = await _context.Animals.FindAsync(IdAnimal);
 
             if (animal == null)
             {
-                return BadRequest("Animal no encontrado");
+                return BadRequest(new { message = "Animal no encontrado" });
             }
 
             try
             {
-                animal = _context.Animals.Include(o => o.TypeAnimalNavigation).FirstOrDefault(a => a.IdAnimal == IdAnimal);
+                animal = await _context.Animals.Include(o => o.TypeAnimalNavigation).FirstOrDefaultAsync(a => a.IdAnimal == IdAnimal);
 
                 return Ok(new { message = "ok", response = animal });
             }
@@ -79,9 +79,9 @@ namespace BackWI.Controllers
 
         [HttpDelete]
         [Route("deleteAnimal/{IdAnimal}")]
-        public IActionResult DeleteAnimal(Guid IdAnimal)
+        public async Task<IActionResult> DeleteAnimal(Guid IdAnimal)
         {
-            Animals _animal = _context.Animals.Find(IdAnimal);
+            Animals _animal = await _context.Animals.FindAsync(IdAnimal);
 
             if (_animal == null)
             {
@@ -103,9 +103,9 @@ namespace BackWI.Controllers
 
         [HttpPut]
         [Route("updateAnimal")]
-        public IActionResult UpdateAnimal(Animals animal)
+        public async Task<IActionResult> UpdateAnimal(Animals animal)
         {
-            Animals _animal = _context.Animals.Find(animal.IdAnimal);
+            Animals _animal = await _context.Animals.FindAsync(animal.IdAnimal);
 
             if (_animal == null)
             {

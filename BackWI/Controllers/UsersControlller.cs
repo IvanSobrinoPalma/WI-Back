@@ -24,9 +24,9 @@ namespace BackWI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(Users user)
+        public async Task<IActionResult> Login(Users user)
         {
-            Users _user = _context.Users.FirstOrDefault(u => u.Nick == user.Nick);
+            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.Nick == user.Nick);
 
             if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
             {
@@ -46,9 +46,9 @@ namespace BackWI.Controllers
 
         [HttpGet]
         [Route("getUser/{IdUser}")]
-        public IActionResult ListUser(Guid IdUser)
+        public async Task<IActionResult> ListUser(Guid IdUser)
         {
-            Users user = _context.Users.Find(IdUser);
+            Users user = await _context.Users.FindAsync(IdUser);
 
             if (user == null)
             {
@@ -57,7 +57,7 @@ namespace BackWI.Controllers
 
             try
             {
-                user = _context.Users.FirstOrDefault(a => a.IdUser == IdUser);
+                user = await _context.Users.FirstOrDefaultAsync(a => a.IdUser == IdUser);
 
                 return Ok(new { message = "ok", response = user });
             }
@@ -87,9 +87,9 @@ namespace BackWI.Controllers
 
         [HttpDelete]
         [Route("deleteUser/{IdUser}")]
-        public IActionResult DeleteAnimal(Guid IdUser)
+        public async Task<IActionResult> DeleteAnimal(Guid IdUser)
         {
-            Users _user = _context.Users.FirstOrDefault(u => u.IdUser == IdUser);
+            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == IdUser);
 
             if (_user == null)
             {
@@ -111,9 +111,9 @@ namespace BackWI.Controllers
 
         [HttpPut]
         [Route("updateUser")]
-        public IActionResult UpdateUser(Users user)
+        public async Task<IActionResult> UpdateUser(Users user)
         {
-            Users _user = _context.Users.Find(user.IdUser);
+            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
 
             if (_user == null)
             {
