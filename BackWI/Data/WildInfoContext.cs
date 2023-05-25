@@ -161,6 +161,11 @@ namespace BackWI.Data
                     .IsUnicode(false)
                     .HasColumnName("passwordd");
 
+                entity.Property(e => e.Roll)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("roll");
+
                 entity.Property(e => e.SecondSurname)
                     .HasMaxLength(100)
                     .IsUnicode(false)

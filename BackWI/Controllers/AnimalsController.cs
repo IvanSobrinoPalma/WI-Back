@@ -78,7 +78,7 @@ namespace BackWI.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteAnimal")]
+        [Route("deleteAnimal/{IdAnimal}")]
         public IActionResult DeleteAnimal(Guid IdAnimal)
         {
             Animals _animal = _context.Animals.Find(IdAnimal);

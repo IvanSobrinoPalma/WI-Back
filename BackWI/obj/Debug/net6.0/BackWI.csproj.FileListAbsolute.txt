@@ -189,3 +189,4 @@ C:\Users\beca_is2\source\repos\TFG\TFG\BackWI\bin\Debug\net6.0\Microsoft.EntityF
 C:\Users\beca_is2\source\repos\TFG\TFG\BackWI\bin\Debug\net6.0\MySql.EntityFrameworkCore.dll
 C:\Users\beca_is2\source\repos\TFG\TFG\BackWI\bin\Debug\net6.0\efpt.config.json
 C:\Users\beca_is2\source\repos\TFG\TFG\BackWI\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\beca_is2\source\repos\TFG\TFG\BackWI\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

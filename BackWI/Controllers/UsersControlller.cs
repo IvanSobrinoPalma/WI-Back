@@ -1,6 +1,7 @@
 ﻿using BackWI.Data;
 using BackWI.Models;
 using BackWI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,30 +44,28 @@ namespace BackWI.Controllers
             return BadRequest(new { message = "No existe ese usuario" });
         }
 
-        //[HttpGet]
-        //[Route("getAnimal/{IdAnimal}")]
-        //public IActionResult ListAnimals(Guid IdAnimal)
-        //{
-        //    Animals animal = _context.Animals.Find(IdAnimal);
+        [HttpGet]
+        [Route("getUser/{IdUser}")]
+        public IActionResult ListUser(Guid IdUser)
+        {
+            Users user = _context.Users.Find(IdUser);
 
-        //    if (animal == null)
-        //    {
-        //        return BadRequest("Animal no encontrado");
-        //    }
+            if (user == null)
+            {
+                return BadRequest(new { message = "Usuario no encontrado" });
+            }
 
-        //    try
-        //    {
-        //        animal = _context.Animals.Include(o => o.TypeAnimalNavigation).FirstOrDefault(a => a.IdAnimal == IdAnimal);
+            try
+            {
+                user = _context.Users.FirstOrDefault(a => a.IdUser == IdUser);
 
-        //        return Ok(new { message = "ok", response = animal });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-        //    }
-
-
-        //}
+                return Ok(new { message = "ok", response = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
+        }
 
         [HttpPost]
         [Route("saveUser")]
@@ -118,7 +117,7 @@ namespace BackWI.Controllers
 
             if (_user == null)
             {
-                return BadRequest("Animal no encontrado");
+                return BadRequest(new { message = "Usuario no encontrado" });
             }
 
             try
