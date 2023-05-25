@@ -1,3 +1,4 @@
+using BackWI.Data;
 using BackWI.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackWI.Model;
 using Microsoft.AspNetCore.Cors;
+using BackWI.Data;
+
 namespace BackWI.Controllers
 {
     [EnableCors("reglasPD")]
@@ -26,11 +27,11 @@ namespace BackWI.Controllers
             try
             {
                 animals = _context.Animals.ToList();
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok", reponse = animals });
+                return Ok(new { message = "ok", response = animals });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { message = ex.Message, reponse = animals });
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
             }
         }
 
@@ -49,11 +50,11 @@ namespace BackWI.Controllers
             {
                 animal = _context.Animals.Include(o => o.TypeAnimalNavigation).FirstOrDefault(a => a.IdAnimal == IdAnimal);
 
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok", reponse = animal });
+                return Ok(new { message = "ok", response = animal });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { message = ex.Message, reponse = animal });
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
             }
 
 
@@ -68,23 +69,23 @@ namespace BackWI.Controllers
                 await _context.Animals.AddAsync(animal);
                 _context.SaveChanges();
 
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok"});
+                return Ok(new { message = "ok", response = animal});
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { message = ex.Message});
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
             }
         }
 
         [HttpDelete]
-        [Route("deleteAnimal/{IdAnimal}")]
+        [Route("deleteAnimal")]
         public IActionResult DeleteAnimal(Guid IdAnimal)
         {
             Animals _animal = _context.Animals.Find(IdAnimal);
 
             if (_animal == null)
             {
-                return BadRequest("Animal no encontrado");
+                return BadRequest(new { message = "Animal no encontrado" });
             }
 
             try
@@ -92,17 +93,17 @@ namespace BackWI.Controllers
                 _context.Animals.Remove(_animal);
                 _context.SaveChanges();
 
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok" });
+                return Ok(new { message = "ok" });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { message = ex.Message });
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
             }
         }
 
         [HttpPut]
         [Route("updateAnimal")]
-        public IActionResult UpdateAnimal([FromBody] Animals animal)
+        public IActionResult UpdateAnimal(Animals animal)
         {
             Animals _animal = _context.Animals.Find(animal.IdAnimal);
 
@@ -113,21 +114,21 @@ namespace BackWI.Controllers
 
             try
             {
-                _animal.NameAnimal = animal.NameAnimal is null ? _animal.NameAnimal : animal.NameAnimal;
+                _animal.NameAnimal = animal.NameAnimal ?? _animal.NameAnimal;
                 _animal.TypeAnimal = animal.TypeAnimal;
-                _animal.ScientificName = animal.ScientificName is null ? _animal.ScientificName : animal.ScientificName;
-                _animal.Image = animal.Image is null ? _animal.Image : animal.Image;
+                _animal.ScientificName = animal.ScientificName ?? _animal.ScientificName;
+                _animal.Image = animal.Image ?? _animal.Image;
                 _animal.DangerOfExtinction = animal.DangerOfExtinction;
                 _animal.Dangerousness = animal.Dangerousness;
+                _animal.TypeAnimalNavigation = animal.TypeAnimalNavigation ?? _animal.TypeAnimalNavigation;
 
-                _context.Animals.Update(_animal);
                 _context.SaveChanges();
 
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok" });
+                return Ok(new { message = "ok" });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { message = ex.Message });
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
             }
         }
     }
