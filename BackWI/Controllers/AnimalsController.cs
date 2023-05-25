@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BackWI.Model;
+using BackWI.Models;
 using Microsoft.AspNetCore.Cors;
 using BackWI.Data;
 
 namespace BackWI.Controllers
 {
     [EnableCors("reglasPD")]
-    [Route("api/[controller]")]
+    [Route("wi/animal")]
     [ApiController]
     public class AnimalsController : ControllerBase
     {

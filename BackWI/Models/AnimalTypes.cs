@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BackWI.Model
+namespace BackWI.Models
 {
     public partial class AnimalTypes
     {

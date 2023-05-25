@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BackWI.Model
+namespace BackWI.Models
 {
     public partial class Animals
     {
@@ -14,7 +14,7 @@ namespace BackWI.Model
         public int Dangerousness { get; set; }
         public Guid TypeAnimal { get; set; }
         public bool DangerOfExtinction { get; set; }
-        public string Image { get; set; }
+        public byte[] Image { get; set; }
 
         public virtual AnimalTypes TypeAnimalNavigation { get; set; }
     }

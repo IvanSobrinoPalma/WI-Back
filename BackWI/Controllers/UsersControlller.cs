@@ -1,27 +1,46 @@
 ﻿using BackWI.Data;
-using BackWI.Model;
+using BackWI.Models;
+using BackWI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackWI.Controllers
 {
     [EnableCors("reglasPD")]
-    [Route("api/[controller]")]
+    [Route("wi/user")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         public readonly WildInfoContext _context;
+        public readonly IJwtProvider _jwtProvider;
 
-        public UsersController(WildInfoContext context)
+        public UsersController(WildInfoContext context, IJwtProvider jwd)
         {
             _context = context;
+            _jwtProvider = jwd;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
-        public IActionResult Login(string UserName, string Pwd)
+        public IActionResult Login(Users user)
         {
-            return null;
+            Users _user = _context.Users.FirstOrDefault(u => u.Nick == user.Nick);
+
+            if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
+            {
+                try
+                {
+                    string token = _jwtProvider.CreateToken(_user);
+                    return Ok(new { message = "ok", response = token });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+                }
+            }
+
+            return BadRequest(new { message = "No existe ese usuario" });
         }
 
         //[HttpGet]
@@ -49,77 +68,78 @@ namespace BackWI.Controllers
 
         //}
 
-        //[HttpPost]
-        //[Route("saveAnimal")]
-        //public async Task<IActionResult> SaveAnimal(Animals animal)
-        //{
-        //    try
-        //    {
-        //        await _context.Animals.AddAsync(animal);
-        //        _context.SaveChanges();
+        [HttpPost]
+        [Route("saveUser")]
+        public async Task<IActionResult> SaveAnimal(Users user)
+        {
+            try
+            {
+                user.Passwordd = BCrypt.Net.BCrypt.HashPassword(user.Passwordd);
+                await _context.Users.AddAsync(user);
+                _context.SaveChanges();
 
-        //        return Ok(new { message = "ok", response = animal });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-        //    }
-        //}
+                return Ok(new { message = "ok", response = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
+        }
 
-        //[HttpDelete]
-        //[Route("deleteAnimal")]
-        //public IActionResult DeleteAnimal(Guid IdAnimal)
-        //{
-        //    Animals _animal = _context.Animals.Find(IdAnimal);
+        [HttpDelete]
+        [Route("deleteUser/{IdUser}")]
+        public IActionResult DeleteAnimal(Guid IdUser)
+        {
+            Users _user = _context.Users.FirstOrDefault(u => u.IdUser == IdUser);
 
-        //    if (_animal == null)
-        //    {
-        //        return BadRequest(new { message = "Animal no encontrado" });
-        //    }
+            if (_user == null)
+            {
+                return BadRequest(new { message = "Usuario no encontrado"});
+            }
 
-        //    try
-        //    {
-        //        _context.Animals.Remove(_animal);
-        //        _context.SaveChanges();
+            try
+            {
+                _context.Users.Remove(_user);
+                _context.SaveChanges();
 
-        //        return Ok(new { message = "ok" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-        //    }
-        //}
+                return Ok(new { message = "ok" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
+        }
 
-        //[HttpPut]
-        //[Route("updateAnimal")]
-        //public IActionResult UpdateAnimal(Animals animal)
-        //{
-        //    Animals _animal = _context.Animals.Find(animal.IdAnimal);
+        [HttpPut]
+        [Route("updateUser")]
+        public IActionResult UpdateUser(Users user)
+        {
+            Users _user = _context.Users.Find(user.IdUser);
 
-        //    if (_animal == null)
-        //    {
-        //        return BadRequest("Animal no encontrado");
-        //    }
+            if (_user == null)
+            {
+                return BadRequest("Animal no encontrado");
+            }
 
-        //    try
-        //    {
-        //        _animal.NameAnimal = animal.NameAnimal ?? _animal.NameAnimal;
-        //        _animal.TypeAnimal = animal.TypeAnimal;
-        //        _animal.ScientificName = animal.ScientificName ?? _animal.ScientificName;
-        //        _animal.Image = animal.Image ?? _animal.Image;
-        //        _animal.DangerOfExtinction = animal.DangerOfExtinction;
-        //        _animal.Dangerousness = animal.Dangerousness;
-        //        _animal.TypeAnimalNavigation = animal.TypeAnimalNavigation ?? _animal.TypeAnimalNavigation;
+            try
+            {
+                _user.NameUser = user.NameUser ?? _user.NameUser;
+                _user.Nick = user.Nick ?? _user.Nick;
+                _user.FirtsSurname = user.FirtsSurname ?? _user.FirtsSurname;
+                _user.SecondSurname = user.SecondSurname ?? _user.SecondSurname;
+                _user.Email = user.Email ?? _user.Email;
+                _user.Passwordd = BCrypt.Net.BCrypt.HashPassword(user.Passwordd) ?? _user.Passwordd;
+                _user.Roll = user.Roll ?? _user.Roll;
 
-        //        _context.SaveChanges();
+                _context.SaveChanges();
 
-        //        return Ok(new { message = "ok" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-        //    }
-        //}
+                return Ok(new { message = "ok" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
+        }
     }
 
 }

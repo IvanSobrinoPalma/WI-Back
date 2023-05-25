@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BackWI.Model
+namespace BackWI.Models
 {
     public partial class Users
     {
@@ -15,5 +15,6 @@ namespace BackWI.Model
         public string NameUser { get; set; }
         public string FirtsSurname { get; set; }
         public string SecondSurname { get; set; }
+        public string Roll { get; set; }
     }
 }

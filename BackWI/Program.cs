@@ -1,5 +1,5 @@
 using BackWI.Data;
-using BackWI.Model;
+using BackWI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -13,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WildInfoContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("conexionSQL")));
 builder.Services.AddControllers().AddJsonOptions(opt => { opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;});
+// Mapping of services
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 var reglas = "reglasPD";
 builder.Services.AddCors(opt =>
