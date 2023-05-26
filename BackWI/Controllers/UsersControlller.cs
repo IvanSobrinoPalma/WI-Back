@@ -15,11 +15,13 @@ namespace BackWI.Controllers
     {
         public readonly WildInfoContext _context;
         public readonly IJwtProvider _jwtProvider;
+        public readonly ITokenService _token;
 
-        public UsersController(WildInfoContext context, IJwtProvider jwd)
+        public UsersController(WildInfoContext context, IJwtProvider jwd, ITokenService token)
         {
             _context = context;
             _jwtProvider = jwd;
+            _token = token;
         }
 
         [HttpGet]
@@ -88,7 +90,7 @@ namespace BackWI.Controllers
         [Authorize(Policy = "owner")]
         [HttpPost]
         [Route("saveUser")]
-        public async Task<IActionResult> SaveAnimal(Users user)
+        public async Task<IActionResult> SaveUser(Users user)
         {
             try
             {
@@ -107,7 +109,7 @@ namespace BackWI.Controllers
         [Authorize(Policy = "owner")]
         [HttpDelete]
         [Route("deleteUser/{IdUser}")]
-        public async Task<IActionResult> DeleteAnimal(Guid IdUser)
+        public async Task<IActionResult> DeleteUser(Guid IdUser)
         {
             Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == IdUser);
 
@@ -134,10 +136,14 @@ namespace BackWI.Controllers
         public async Task<IActionResult> UpdateUser(Users user)
         {
             Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
+            Guid idUser = _token.GetContentByToken(HttpContext, "idUser");
 
             if (_user == null)
             {
                 return BadRequest(new { message = "Usuario no encontrado" });
+            } else if(idUser != user.IdUser)
+            {
+                return Unauthorized(new { message = "No son tus datos" });
             }
 
             try

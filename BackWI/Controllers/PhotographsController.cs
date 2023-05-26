@@ -1,8 +1,10 @@
 ﻿using BackWI.Data;
 using BackWI.Models;
+using BackWI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BackWI.Controllers
 {
@@ -12,10 +14,12 @@ namespace BackWI.Controllers
     public class PhotographsController : ControllerBase
     {
         public readonly WildInfoContext _context;
+        public readonly ITokenService _token;
 
-        public PhotographsController(WildInfoContext context)
+        public PhotographsController(WildInfoContext context, ITokenService token)
         {
             _context = context;
+            _token = token;
         }
 
         [HttpGet]
@@ -23,6 +27,13 @@ namespace BackWI.Controllers
         public async Task<IActionResult> ListPictures(Guid IdUser)
         {
             List<Photographs> user = new List<Photographs>();
+
+            Guid idUser = _token.GetContentByToken(HttpContext, "idUser");
+
+            if (idUser != IdUser)
+            {
+                return Unauthorized(new { message = "No son tus datos" });
+            }
 
             try
             {
@@ -41,6 +52,12 @@ namespace BackWI.Controllers
         public async Task<IActionResult> GetPictures(Guid IdUser, Guid IdAnimal)
         {
             Photographs user = new Photographs();
+            Guid idUser = _token.GetContentByToken(HttpContext, "idUser");
+
+            if (idUser != IdUser)
+            {
+                return Unauthorized(new { message = "No son tus datos" });
+            }
 
             try
             {
@@ -99,10 +116,15 @@ namespace BackWI.Controllers
         public async Task<IActionResult> UpdatePicture(Photographs picture)
         {
             Photographs _picture = await _context.Photographs.Where(p => p.IdUser == picture.IdUser).Where(p => p.IdAnimal == picture.IdAnimal).FirstOrDefaultAsync();
+            Guid idUser = _token.GetContentByToken(HttpContext, "idUser");
 
             if (_picture == null)
             {
-                return BadRequest(new { message = "Foto no encontrada" });
+                return BadRequest(new { message = "Usuario no encontrado" });
+            }
+            else if (idUser != picture.IdUser)
+            {
+                return Unauthorized(new { message = "No son tus datos" });
             }
 
             try

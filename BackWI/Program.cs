@@ -41,6 +41,7 @@ builder.Services.AddControllers().AddJsonOptions(opt => { opt.JsonSerializerOpti
 
 // Mapping of services
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var reglas = "reglasPD";
 builder.Services.AddCors(opt =>
@@ -50,6 +51,7 @@ builder.Services.AddCors(opt =>
         builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
