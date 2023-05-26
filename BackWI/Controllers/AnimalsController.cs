@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using BackWI.Models;
 using Microsoft.AspNetCore.Cors;
 using BackWI.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackWI.Controllers
 {
@@ -60,6 +61,7 @@ namespace BackWI.Controllers
 
         }
 
+        [Authorize(Policy = "owner")]
         [HttpPost]
         [Route("saveAnimal")]
         public async Task<IActionResult> SaveAnimal(Animals animal) 
@@ -77,6 +79,7 @@ namespace BackWI.Controllers
             }
         }
 
+        [Authorize(Policy = "owner")]
         [HttpDelete]
         [Route("deleteAnimal/{IdAnimal}")]
         public async Task<IActionResult> DeleteAnimal(Guid IdAnimal)
@@ -109,7 +112,7 @@ namespace BackWI.Controllers
 
             if (_animal == null)
             {
-                return BadRequest("Animal no encontrado");
+                return BadRequest(new { message = "Animal no encontrado" });
             }
 
             try

@@ -22,26 +22,22 @@ namespace BackWI.Controllers
             _jwtProvider = jwd;
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login(Users user)
+        [HttpGet]
+        [Route("getUsers")]
+        public async Task<IActionResult> ListUsers()
         {
-            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.Nick == user.Nick);
+            List<Users> user = new List<Users>();
 
-            if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
+            try
             {
-                try
-                {
-                    string token = _jwtProvider.CreateToken(_user);
-                    return Ok(new { message = "ok", response = token });
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-                }
-            }
+                user = await _context.Users.ToListAsync();
 
-            return BadRequest(new { message = "No existe ese usuario" });
+                return Ok(new { message = "ok", response = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
         }
 
         [HttpGet]
@@ -68,6 +64,29 @@ namespace BackWI.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login(Users user)
+        {
+            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.Nick == user.Nick);
+
+            if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
+            {
+                try
+                {
+                    string token = _jwtProvider.CreateToken(_user);
+                    return Ok(new { message = "ok", response = token });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+                }
+            }
+
+            return BadRequest(new { message = "No existe ese usuario" });
+        }
+
+        [Authorize(Policy = "owner")]
+        [HttpPost]
         [Route("saveUser")]
         public async Task<IActionResult> SaveAnimal(Users user)
         {
@@ -85,6 +104,7 @@ namespace BackWI.Controllers
             }
         }
 
+        [Authorize(Policy = "owner")]
         [HttpDelete]
         [Route("deleteUser/{IdUser}")]
         public async Task<IActionResult> DeleteAnimal(Guid IdUser)

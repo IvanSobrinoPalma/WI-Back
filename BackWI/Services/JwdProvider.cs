@@ -18,7 +18,7 @@ namespace BackWI.Services
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Name, user.Nick),
-                    new Claim(ClaimTypes.Role, user.Roll)
+                    new Claim("roleId", user.Roll)
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 this.configuration.GetSection("AppSettings:Token").Value!));
