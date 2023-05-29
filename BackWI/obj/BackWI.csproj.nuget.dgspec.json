@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\beca_is2\\source\\repos\\TFG\\TFG\\BackWI\\BackWI.csproj": {}
+    "C:\\Users\\Iván\\Desktop\\repos\\BackWI\\TFG\\BackWI\\BackWI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\beca_is2\\source\\repos\\TFG\\TFG\\BackWI\\BackWI.csproj": {
+    "C:\\Users\\Iván\\Desktop\\repos\\BackWI\\TFG\\BackWI\\BackWI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\beca_is2\\source\\repos\\TFG\\TFG\\BackWI\\BackWI.csproj",
+        "projectUniqueName": "C:\\Users\\Iván\\Desktop\\repos\\BackWI\\TFG\\BackWI\\BackWI.csproj",
         "projectName": "BackWI",
-        "projectPath": "C:\\Users\\beca_is2\\source\\repos\\TFG\\TFG\\BackWI\\BackWI.csproj",
-        "packagesPath": "C:\\Users\\beca_is2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\beca_is2\\source\\repos\\TFG\\TFG\\BackWI\\obj\\",
+        "projectPath": "C:\\Users\\Iván\\Desktop\\repos\\BackWI\\TFG\\BackWI\\BackWI.csproj",
+        "packagesPath": "C:\\Users\\Iván\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Iván\\Desktop\\repos\\BackWI\\TFG\\BackWI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\beca_is2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Iván\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
