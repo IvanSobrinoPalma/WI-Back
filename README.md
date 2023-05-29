@@ -10,8 +10,8 @@ Es una wiki de animales donde la gente pueden aportar fotografías y crear ranki
 - [ ] Profile - Mobile
 - [x] Login
 - [x] Login - Mobile
-~~Signup~~
-~~Signup - Mobile~~
+- [x] Signup
+- [x] Signup - Mobile
 
 ## Páginas
 
