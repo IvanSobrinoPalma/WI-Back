@@ -28,10 +28,19 @@ Es una wiki de animales donde la gente pueden aportar fotografías y crear ranki
 
 * Foto
 * Nombre de usuario
-* Settings
-* Fotos de animales
+* Botón de cámara
+* Subir foto de animal (con sus respectivos datos)
+* Fotos de animales (Galería)
+<!-- * Settings -->
 
 ### Wiki Animal
+
+* Imagen
+* Nombre de animal
+* Nombre científico
+* Familia
+* Peligrosidad (1 - 5)
+* Peligro de extinción
 
 ### Login Page
 
