@@ -15,33 +15,31 @@ namespace BackWI.Controllers
     {
         public readonly WildInfoContext _context;
         public readonly IJwtProvider _jwtProvider;
+        public readonly ITokenService _token;
 
-        public UsersController(WildInfoContext context, IJwtProvider jwd)
+        public UsersController(WildInfoContext context, IJwtProvider jwd, ITokenService token)
         {
             _context = context;
             _jwtProvider = jwd;
+            _token = token;
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login(Users user)
+        [HttpGet]
+        [Route("getUsers")]
+        public async Task<IActionResult> ListUsers()
         {
-            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.Nick == user.Nick);
+            List<Users> user = new List<Users>();
 
-            if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
+            try
             {
-                try
-                {
-                    string token = _jwtProvider.CreateToken(_user);
-                    return Ok(new { message = "ok", response = token });
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
-                }
-            }
+                user = await _context.Users.ToListAsync();
 
-            return BadRequest(new { message = "No existe ese usuario" });
+                return Ok(new { message = "ok", response = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
         }
 
         [HttpGet]
@@ -68,8 +66,31 @@ namespace BackWI.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login(Users user)
+        {
+            Users _user = await _context.Users.FirstOrDefaultAsync(u => u.Nick == user.Nick);
+
+            if (_user != null && BCrypt.Net.BCrypt.Verify(user.Passwordd, _user.Passwordd))
+            {
+                try
+                {
+                    string token = _jwtProvider.CreateToken(_user);
+                    return Ok(new { message = "ok", response = token });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+                }
+            }
+
+            return BadRequest(new { message = "No existe ese usuario" });
+        }
+
+        [Authorize(Policy = "owner")]
+        [HttpPost]
         [Route("saveUser")]
-        public async Task<IActionResult> SaveAnimal(Users user)
+        public async Task<IActionResult> SaveUser(Users user)
         {
             try
             {
@@ -85,9 +106,10 @@ namespace BackWI.Controllers
             }
         }
 
+        [Authorize(Policy = "owner")]
         [HttpDelete]
         [Route("deleteUser/{IdUser}")]
-        public async Task<IActionResult> DeleteAnimal(Guid IdUser)
+        public async Task<IActionResult> DeleteUser(Guid IdUser)
         {
             Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == IdUser);
 
@@ -114,10 +136,14 @@ namespace BackWI.Controllers
         public async Task<IActionResult> UpdateUser(Users user)
         {
             Users _user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == user.IdUser);
+            Guid idUser = _token.GetContentByToken(HttpContext, "idUser");
 
             if (_user == null)
             {
                 return BadRequest(new { message = "Usuario no encontrado" });
+            } else if(idUser != user.IdUser)
+            {
+                return Unauthorized(new { message = "No son tus datos" });
             }
 
             try

@@ -2,10 +2,16 @@
 
 Es una wiki de animales donde la gente pueden aportar fotografías y crear rankings con estas.
 
-## Tecnologías
-
-* SvelteKit
-* Bootstrap
+- [x] Home
+- [x] Home - Mobile
+- [ ] Wiki
+- [ ] Wiki - Mobile
+- [ ] Profile
+- [ ] Profile - Mobile
+- [x] Login
+- [x] Login - Mobile
+- [x] Signup
+- [x] Signup - Mobile
 
 ## Páginas
 
@@ -13,8 +19,10 @@ Es una wiki de animales donde la gente pueden aportar fotografías y crear ranki
 
 * Nav (Logo, Home, Search bar, Ranking, Login/Perfil)
 * Hero Section (con descripción y eso)
-* Slider (Páginas wiki de los animales)
+* Slider (Páginas wiki de los animales con infinite scroll)
 * Footer
+
+<!-- * Contact (Para reportar problemas, pedir features, gestión de cuentas, etc.) -->
 
 ### Perfil
 
@@ -26,3 +34,15 @@ Es una wiki de animales donde la gente pueden aportar fotografías y crear ranki
 ### Wiki Animal
 
 ### Login Page
+
+* Nombre de usuario
+* Contraseña
+
+### Signup Page
+
+* Usuario
+* Nombre
+* Apellidos
+* Email
+* Contraseña
+* Confirmar Contraseña
