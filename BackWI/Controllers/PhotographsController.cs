@@ -72,7 +72,7 @@ namespace BackWI.Controllers
         }
 
         [HttpPost]
-        [Route("savePicture")]
+        [Route("addPicture")]
         public async Task<IActionResult> SavePicture(Photographs picture)
         {
             try

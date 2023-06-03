@@ -64,7 +64,7 @@ namespace BackWI.Controllers
 
         [Authorize(Policy = "owner")]
         [HttpPost]
-        [Route("saveAnimal")]
+        [Route("addAnimal")]
         public async Task<IActionResult> SaveAnimal(Animals animal) 
         {
             try

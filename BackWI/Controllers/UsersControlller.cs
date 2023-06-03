@@ -89,12 +89,32 @@ namespace BackWI.Controllers
 
         [Authorize(Policy = "owner")]
         [HttpPost]
-        [Route("saveUser")]
-        public async Task<IActionResult> SaveUser(Users user)
+        [Route("addAdmin")]
+        public async Task<IActionResult> SaveAdminUser(Users user)
         {
             try
             {
                 user.Passwordd = BCrypt.Net.BCrypt.HashPassword(user.Passwordd);
+                user.Roll = "admin";
+                await _context.Users.AddAsync(user);
+                _context.SaveChanges();
+
+                return Ok(new { message = "ok", response = user });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, trace = ex.StackTrace });
+            }
+        }
+
+        [HttpPost]
+        [Route("addClient")]
+        public async Task<IActionResult> SaveClientUser(Users user)
+        {
+            try
+            {
+                user.Passwordd = BCrypt.Net.BCrypt.HashPassword(user.Passwordd);
+                user.Roll = "client";
                 await _context.Users.AddAsync(user);
                 _context.SaveChanges();
 
