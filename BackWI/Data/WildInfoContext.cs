@@ -65,8 +65,8 @@ namespace BackWI.Data
                 entity.Property(e => e.Dangerousness).HasColumnName("dangerousness");
 
                 entity.Property(e => e.Image)
-                    .IsRequired()
-                    .HasColumnType("image")
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
                     .HasColumnName("image");
 
                 entity.Property(e => e.NameAnimal)
@@ -106,7 +106,6 @@ namespace BackWI.Data
                 entity.Property(e => e.IdAnimal).HasColumnName("id_animal");
 
                 entity.Property(e => e.Image)
-                    .IsRequired()
                     .HasColumnType("image")
                     .HasColumnName("image");
 
